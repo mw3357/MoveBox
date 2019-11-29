@@ -13,6 +13,7 @@ public class Canvas extends Window implements KeyListener, Runnable {
     private String name;
     private int keyMove;
     private Box box;
+    private int times;
 
     // Don't delete this constructor!
     public Canvas() {
@@ -25,14 +26,36 @@ public class Canvas extends Window implements KeyListener, Runnable {
         super(sFrame); //include this line in your own constructor
         initialize();  //include this line in your own constructor
         this.name = name;
-        this.box = new Box(Color.white, 50,50,20);
+        this.box = new Box(Color.orange, 350,250,50);
         this.keyMove = 10;  //random setup
+        this.times = 0;
         drawBox(box);
     }
 
     // Create your drawBox method below
     public void drawBox(Box b){
-        drawSquare(b.getColor(), b.getX(), b.getY(), b.getWidth());
+
+        if(b.getX() == 800){
+            b.setX(0);
+            this.times += 1;
+        }
+        else if(b.getX() == 0){
+           b.setX(800);
+            this.times += 1;
+        }
+        else if(b.getY() == 600){
+            b.setY(0);
+            this.times += 1;
+        }
+        else if(b.getY() == 0){
+            b.setY(600);
+            this.times += 1;
+        }
+        else{
+            drawSquare(b.getColor(), b.getX(), b.getY(), b.getWidth());
+        }
+
+
     }
 
     private void updateBox(Box update) {
@@ -45,7 +68,8 @@ public class Canvas extends Window implements KeyListener, Runnable {
     @Override
     public void update(Graphics g) {
         //This method will automatically reload every 0.05 seconds
-        g.drawString("Manjun",20,20);
+        drawString(Color.GRAY,this.name + "'s Canvas",20,50,50);
+        drawString(Color.GRAY, "Number of times passing edges: " + times,15,50,70);
         g.drawImage(buf, 0, 0, null);//Don't delete this code!
     }
 
@@ -113,11 +137,23 @@ public class Canvas extends Window implements KeyListener, Runnable {
         if (e.getKeyCode() == 27) {
             this.dispose();
             System.exit(0);
-        } else {
+        } else if(e.getKeyCode() == 37){
+            box.setX(box.getX() - keyMove);
+            updateBox(box);
+        }
+        else if(e.getKeyCode() == 39){
             box.setX(box.getX() + keyMove);
             updateBox(box);
         }
-        keyPressed = e.getKeyChar();
+        else if(e.getKeyCode() == 38){
+            box.setY(box.getY() - keyMove);
+            updateBox(box);
+        }
+        else if(e.getKeyCode() == 40){
+            box.setY(box.getY() + keyMove);
+            updateBox(box);
+        }
+       // keyPressed = e.getKeyChar();
     }
 
     @Override
